@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: medislot-backend
+    runtime: java
+    plan: free
+    rootDir: backend
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -Dserver.port=$PORT -jar target/medislot-backend-1.0.0.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DATABASE_URL
+        fromDatabase:
+          name: medislot-db
+          property: connectionString
+      - key: JWT_SECRET
+        value: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+
+databases:
+  - name: medislot-db
+    plan: free
+    databaseName: medislot
+    user: medislot_user
