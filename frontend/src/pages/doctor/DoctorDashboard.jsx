@@ -114,7 +114,7 @@ export default function DoctorDashboard() {
   const handleCancelByDoctor = async (id) => {
     try {
       await api.post(`/doctor/appointment/${id}/cancel`);
-      setFeedbackMsg({ type: 'success', text: 'Appointment cancelled. Slot restored via Segment Tree & offered to waiting list.' });
+      setFeedbackMsg({ type: 'success', text: 'Appointment cancelled. Slot restored & offered to waiting list.' });
       loadDailySchedule();
     } catch (err) {
       setFeedbackMsg({ type: 'error', text: 'Error cancelling appointment.' });

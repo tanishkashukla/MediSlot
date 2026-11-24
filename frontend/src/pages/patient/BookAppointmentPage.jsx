@@ -95,7 +95,7 @@ export default function BookAppointmentPage() {
       });
       setAvailability(res.data);
     } catch (err) {
-      setErrorMsg('Failed to fetch slot availability via Segment Tree.');
+      setErrorMsg('Failed to fetch slot availability.');
     } finally {
       setLoadingSlots(false);
     }
@@ -178,7 +178,7 @@ export default function BookAppointmentPage() {
       <div>
         <h1 className="text-2xl font-black text-slate-900">Book Doctor Appointment</h1>
         <p className="text-xs text-slate-500">
-          7-Step intelligent scheduling workflow powered by Segment Tree slot queries and race condition prevention.
+          Intelligent scheduling workflow with real-time slot verification and double-booking prevention.
         </p>
       </div>
 

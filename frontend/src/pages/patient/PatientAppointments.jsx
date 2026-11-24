@@ -250,7 +250,7 @@ export default function PatientAppointments() {
         <div className="space-y-4">
           <p className="text-xs text-slate-600">
             Are you sure you want to cancel this appointment?
-            The reserved slot will be restored immediately via the Segment Tree and automatically offered to the highest-priority eligible patient waiting in queue.
+            The reserved slot will be restored immediately and automatically offered to the highest-priority eligible patient waiting in queue.
           </p>
           <div className="flex justify-end space-x-3 pt-2">
             <button

@@ -27,7 +27,7 @@ export default function DoctorFinder({ doctors, specializations, selectedSpecial
               Find Doctors & Check Slot Availability
             </h2>
             <p className="text-slate-600 mt-1 text-sm">
-              All 36 faculty specialists maintain synchronized Segment-Tree schedules.
+              All 36 faculty specialists maintain synchronized real-time schedules.
             </p>
           </div>
 

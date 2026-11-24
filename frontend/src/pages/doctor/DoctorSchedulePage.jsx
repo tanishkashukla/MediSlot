@@ -40,7 +40,7 @@ export default function DoctorSchedulePage() {
       });
       setFeedback({
         type: 'success',
-        text: `Slot #${slotIndex} ${currentlyBlocked ? 'unblocked' : 'blocked'} successfully! Segment Tree availability updated in real-time.`,
+        text: `Slot #${slotIndex} ${currentlyBlocked ? 'unblocked' : 'blocked'} successfully! Schedule availability updated in real-time.`,
       });
       loadSchedule();
     } catch (err) {
@@ -76,9 +76,6 @@ export default function DoctorSchedulePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 gap-4">
         <div>
           <h1 className="text-2xl font-black text-slate-900">Calendar & Schedule Management</h1>
-          <p className="text-xs text-slate-500">
-            Configure working hours and block/unblock slots. Changes are reflected in the Segment Tree instantly.
-          </p>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -125,7 +122,7 @@ export default function DoctorSchedulePage() {
           {loading ? (
             <div className="py-12 text-center text-slate-500 text-sm">
               <div className="inline-block w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin mb-3"></div>
-              <p>Loading slots from Segment Tree...</p>
+              <p>Loading available slots...</p>
             </div>
           ) : !availability ? (
             <p className="text-xs text-slate-500">No schedule found for this date.</p>
@@ -197,7 +194,7 @@ export default function DoctorSchedulePage() {
             <span>Configure Working Hours</span>
           </h2>
           <p className="text-xs text-slate-500">
-            Set default clinic shift hours and slot length. Updating hours re-indexes the Segment Tree structure.
+            Set default clinic shift hours and slot length.
           </p>
 
           <form onSubmit={handleSaveHours} className="space-y-4 pt-2">
@@ -240,7 +237,7 @@ export default function DoctorSchedulePage() {
               disabled={savingHours}
               className="w-full py-2.5 rounded-xl font-bold text-xs text-white bg-teal-600 hover:bg-teal-700 transition disabled:opacity-50"
             >
-              {savingHours ? 'Saving Changes...' : 'Update Hours & Rebuild Tree'}
+              {savingHours ? 'Saving Changes...' : 'Save Working Hours'}
             </button>
           </form>
         </div>

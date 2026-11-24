@@ -55,7 +55,7 @@ export default function SpecializationsGrid({ specializations, onSelectSpecializ
             18 Hospital Specializations
           </h2>
           <p className="text-slate-600 mt-3 text-base">
-            Select a specialty to explore doctors, examine Segment-Tree managed appointment slots, or join our intelligent waiting list.
+            Select a specialty to explore doctors, examine available appointment slots, or join our intelligent waiting list.
           </p>
         </div>
 
