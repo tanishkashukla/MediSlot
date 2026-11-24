@@ -28,9 +28,6 @@ export default function DoctorWaitingListPage() {
       
       <div>
         <h1 className="text-2xl font-black text-slate-900">Waiting-List & Slot Offers</h1>
-        <p className="text-xs text-slate-500">
-          Patients in queue for your clinical department, organized by Custom Binary Min Heap priority order.
-        </p>
       </div>
 
       {loading ? (
@@ -48,7 +45,7 @@ export default function DoctorWaitingListPage() {
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-200">
                 <tr>
-                  <th className="px-5 py-3">Heap Rank</th>
+                  <th className="px-5 py-3">Queue Rank</th>
                   <th className="px-5 py-3">Patient Name</th>
                   <th className="px-5 py-3">Priority Level</th>
                   <th className="px-5 py-3">Target Date</th>

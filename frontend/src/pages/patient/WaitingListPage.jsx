@@ -45,7 +45,7 @@ export default function WaitingListPage() {
     setSubmitting(true);
     try {
       await api.post(`/patient/waiting-list/offer/${id}/decline`);
-      setActionMsg('Offer declined. The slot has been re-allocated to the next patient in the Min Heap.');
+      setActionMsg('Offer declined. The slot has been re-allocated to the next waiting patient.');
       loadWaitingList();
     } catch (err) {
       setActionMsg('Error: ' + (err.response?.data?.message || err.message));
