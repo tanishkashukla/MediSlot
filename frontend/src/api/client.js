@@ -1,7 +1,29 @@
 import axios from 'axios';
 
+// Resolve backend API URL intelligently
+let backendUrl = import.meta.env.VITE_API_URL;
+
+if (!backendUrl) {
+  // If not set via env var, check if running in production or development
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    backendUrl = 'https://medislot-1ecf.onrender.com/api';
+  } else {
+    backendUrl = '/api';
+  }
+}
+
+// Clean up URL: remove trailing slash
+backendUrl = backendUrl.trim().replace(/\/+$/, '');
+
+// Ensure it ends with /api if it's pointing to the root domain
+if (!backendUrl.endsWith('/api') && backendUrl.startsWith('http')) {
+  backendUrl = `${backendUrl}/api`;
+}
+
+console.log('[MediSlot API] Using Base URL:', backendUrl);
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: backendUrl,
   headers: {
     'Content-Type': 'application/json',
   },
