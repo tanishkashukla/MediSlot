@@ -110,7 +110,29 @@ export default function PatientAppointments() {
     }
   };
 
-  const filteredAppointments = appointments.filter((a) => {
+  const isPast = (appointmentDate, endTime) => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    if (appointmentDate < todayStr) return true;
+    if (appointmentDate === todayStr && endTime) {
+      const nowStr = new Date().toTimeString().slice(0, 5);
+      return endTime < nowStr;
+    }
+    return false;
+  };
+
+  const getEffectiveStatus = (a) => {
+    if ((a.status === 'CONFIRMED' || a.status === 'CHECKED_IN') && isPast(a.appointmentDate, a.endTime)) {
+      return 'COMPLETED';
+    }
+    return a.status;
+  };
+
+  const normalizedAppointments = appointments.map((a) => ({
+    ...a,
+    status: getEffectiveStatus(a),
+  }));
+
+  const filteredAppointments = normalizedAppointments.filter((a) => {
     if (filter === 'UPCOMING') return a.status === 'CONFIRMED' || a.status === 'CHECKED_IN';
     if (filter === 'COMPLETED') return a.status === 'COMPLETED';
     if (filter === 'CANCELLED') return a.status === 'CANCELLED';

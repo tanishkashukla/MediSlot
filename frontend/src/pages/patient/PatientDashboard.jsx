@@ -67,9 +67,19 @@ export default function PatientDashboard() {
     }
   };
 
-  const upcomingAppointments = appointments.filter(
-    (a) => a.status === 'CONFIRMED' || a.status === 'CHECKED_IN' || a.status === 'IN_CONSULTATION'
-  );
+  const isPast = (appointmentDate, endTime) => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    if (appointmentDate < todayStr) return true;
+    if (appointmentDate === todayStr && endTime) {
+      const nowStr = new Date().toTimeString().slice(0, 5);
+      return endTime < nowStr;
+    }
+    return false;
+  };
+
+  const upcomingAppointments = appointments
+    .filter((a) => !isPast(a.appointmentDate, a.endTime))
+    .filter((a) => a.status === 'CONFIRMED' || a.status === 'CHECKED_IN' || a.status === 'IN_CONSULTATION');
 
   const activeOffers = waitingList.filter((w) => w.status === 'OFFERED');
 

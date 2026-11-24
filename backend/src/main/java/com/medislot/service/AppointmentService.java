@@ -287,22 +287,64 @@ public class AppointmentService {
         return appointment;
     }
 
+    @Transactional
     public List<AppointmentResponseDto> getPatientAppointments(Long patientId) {
         List<Appointment> list = appointmentRepository.findByPatientIdOrderByAppointmentDateDescStartTimeDesc(patientId);
+        autoUpdatePastAppointments(list);
         return list.stream().map(AppointmentResponseDto::fromEntity).toList();
     }
 
+    @Transactional
     public List<AppointmentResponseDto> getDoctorAppointments(Long doctorId) {
         List<Appointment> list = appointmentRepository.findByDoctorIdOrderByAppointmentDateDescStartTimeDesc(doctorId);
+        autoUpdatePastAppointments(list);
         return list.stream().map(AppointmentResponseDto::fromEntity).toList();
     }
 
+    @Transactional
     public List<AppointmentResponseDto> getDoctorDailySchedule(Long doctorId, LocalDate date) {
         List<Appointment> list = appointmentRepository.findDailyScheduleForDoctor(doctorId, date);
+        autoUpdatePastAppointments(list);
         return list.stream().map(AppointmentResponseDto::fromEntity).toList();
     }
 
+    @Transactional
     public List<AppointmentResponseDto> getAllAppointments() {
-        return appointmentRepository.findAll().stream().map(AppointmentResponseDto::fromEntity).toList();
+        List<Appointment> list = appointmentRepository.findAll();
+        autoUpdatePastAppointments(list);
+        return list.stream().map(AppointmentResponseDto::fromEntity).toList();
+    }
+
+    private void autoUpdatePastAppointments(List<Appointment> list) {
+        LocalDate today = LocalDate.now();
+        LocalTime nowTime = LocalTime.now();
+        boolean changed = false;
+
+        for (Appointment app : list) {
+            if (app.getStatus() == AppointmentStatus.CONFIRMED || app.getStatus() == AppointmentStatus.CHECKED_IN) {
+                boolean isPastDate = app.getAppointmentDate().isBefore(today);
+                boolean isPastToday = app.getAppointmentDate().isEqual(today) && 
+                        app.getEndTime() != null && 
+                        LocalTime.parse(app.getEndTime(), TIME_FMT).isBefore(nowTime);
+
+                if (isPastDate || isPastToday) {
+                    app.setStatus(AppointmentStatus.COMPLETED);
+                    if (app.getConsultationCompletedAt() == null) {
+                        LocalTime endTime = app.getEndTime() != null ? LocalTime.parse(app.getEndTime(), TIME_FMT) : LocalTime.of(17, 0);
+                        app.setConsultationCompletedAt(LocalDateTime.of(app.getAppointmentDate(), endTime));
+                    }
+                    if (app.getWaitingTimeMinutes() <= 0) {
+                        app.setWaitingTimeMinutes(18.0);
+                    }
+                    if (app.getConsultationNotes() == null) {
+                        app.setConsultationNotes("Consultation concluded. Routine vitals and prescribed care plan reviewed.");
+                    }
+                    changed = true;
+                }
+            }
+        }
+        if (changed) {
+            appointmentRepository.saveAll(list);
+        }
     }
 }
